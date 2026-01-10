@@ -20,11 +20,13 @@ app.use(express.urlencoded({ extended: true }));
 
 // routes
 const userRoutes = require("./route/user.route");
+const captainRoutes = require('./route/captain.routes')
 
 app.get("/", (req, res) => {
     res.send("server is running");
 });
 
 app.use("/user", userRoutes);
+app.use('/captains', captainRoutes)
 
 module.exports = app;
