@@ -1,7 +1,48 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UserDataContext } from "../contaxt/user_context";
 const UserSignup = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [userData, setUserData] = useState({});
+
+  const navigate = useNavigate();
+  const {user, setUser} = React.useContext(UserDataContext)
+  console.log(React.useContext(UserDataContext));
+
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const newUser = {
+      fullname: {
+        firstName: firstName,
+        lastName: lastName,
+      },
+      email: email,
+      password: password,
+    };
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/user/register`,
+      newUser
+    );
+    
+
+    if(response.status === 201){
+      const data = response.data
+      setUser(data.user)
+
+      navigate('/home')
+    }
+
+    setEmail("");
+    setPassword("");
+    setfirstName("");
+    setlastName("");
+  };
+
   return (
     <div className="p-7 h-screen flex flex-col justify-between">
       <div>
@@ -22,12 +63,20 @@ const UserSignup = () => {
               className="bg-[#eeeeee] w-1/2 mb-7 rounded px-4 py-2 border  text-lg placeholder:text-base"
               type="text"
               placeholder="type your first name"
+              value={firstName}
+              onChange={(e) => {
+                setfirstName(e.target.value);
+              }}
             />
-             <input
+            <input
               required
               className="bg-[#eeeeee] w-1/2 mb-7 rounded px-4 py-2 border  text-lg placeholder:text-base"
               type="text"
               placeholder="type your first Last name"
+              value={lastName}
+              onChange={(e) => {
+                setlastName(e.target.value);
+              }}
             />
           </div>
           <h3 className="text-lg font-medium mb-2">What's your email</h3>
@@ -36,6 +85,10 @@ const UserSignup = () => {
             className="bg-[#eeeeee] mb-7 rounded px-4 py-2 border w-full text-lg placeholder:text-base"
             type="email"
             placeholder="type your email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
           />
 
           <h3 className="text-lg font-medium mb-2">Enter your password</h3>
@@ -44,10 +97,14 @@ const UserSignup = () => {
             className="bg-[#eeeeee] mb-7 rounded px-4 py-2 border w-full text-lg placeholder:text-base"
             type="password"
             placeholder="password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
           />
 
           <button className="bg-[#111] text-white font-semibold mb-7 rounded px-4 py-2 w-full text-lg">
-            Login
+            Create account
           </button>
           <p className="text-center">
             already have account ?{" "}
@@ -58,12 +115,9 @@ const UserSignup = () => {
         </form>
       </div>
       <div>
-        <Link
-          to={"/captain-login"}
-          className="bg-[#10b461] flex item-center justify-center text-white font-semibold mb-7 rounded px-4 py-2 w-full text-lg"
-        >
-          sign in as captain
-        </Link>
+        <p className="text-es">
+          By procding your account dkfj dijfd aijdjf aieie akjdf ajdfj
+        </p>
       </div>
     </div>
   );
